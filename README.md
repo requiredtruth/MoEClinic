@@ -86,3 +86,12 @@ python -m compileall -q moeclinic tests
 Donations directly fund more RequiredTruth development. The Bitcoin, Ethereum/EVM, and Dogecoin addresses and the confirmed-transaction request process are in [`SUPPORT.md`](SUPPORT.md). A donor may open an issue with a public transaction hash and ask for more work in a specific direction; never post a private key or seed phrase.
 
 Apache-2.0 licensed.
+
+
+## Install and run
+
+```sh
+chmod +x install.sh run.sh
+./install.sh
+./run.sh --help
+```
