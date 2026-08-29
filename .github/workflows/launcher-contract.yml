@@ -34,4 +34,8 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
           PROJECT_GUI_SMOKE: demo
-        run: ./install.sh && ./run.sh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libegl1
+          ./install.sh
+          ./run.sh
