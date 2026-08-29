@@ -30,3 +30,8 @@ jobs:
           grep -qi 'PySide6' install.sh
           grep -q 'cli.sh' README.md
           grep -q 'test.sh' project_gui.py
+      - name: Run bundled GUI demo
+        env:
+          QT_QPA_PLATFORM: offscreen
+          PROJECT_GUI_SMOKE: demo
+        run: ./install.sh && ./run.sh

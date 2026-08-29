@@ -136,7 +136,12 @@ def main() -> int:
     app = QApplication(sys.argv)
     window = ControlPanel()
     window.show()
-    if os.environ.get("PROJECT_GUI_SMOKE") == "1":
+    smoke = os.environ.get("PROJECT_GUI_SMOKE")
+    if smoke == "demo":
+        window.process.finished.connect(lambda code, _status: app.exit(code))
+        QTimer.singleShot(0, window.run_demo)
+        QTimer.singleShot(15_000, lambda: app.exit(124))
+    elif smoke == "1":
         QTimer.singleShot(75, app.quit)
     return app.exec()
 
