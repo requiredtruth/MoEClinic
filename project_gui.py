@@ -7,6 +7,8 @@ import shlex
 import sys
 from pathlib import Path
 
+from moeclinic.gui_support import demo_arguments
+
 from PySide6.QtCore import QProcess, QTimer, QUrl
 from PySide6.QtGui import QDesktopServices, QFont, QTextCursor
 from PySide6.QtWidgets import (
@@ -43,14 +45,16 @@ class ControlPanel(QMainWindow):
         title.setFont(QFont("Sans Serif", 20, QFont.Bold))
         self.status = QLabel("Ready")
         self.args = QLineEdit()
-        self.args.setPlaceholderText("Optional CLI arguments")
+        self.args.setPlaceholderText(
+            "Optional: TRACE.jsonl [CLI options]; blank uses bundled healthy demo"
+        )
         self.output = QPlainTextEdit()
         self.output.setReadOnly(True)
         self.output.setPlaceholderText("Command output appears here.")
 
         buttons = QHBoxLayout()
         for label, handler in (
-            ("Run demo", self.run_demo),
+            ("Analyze trace / demo", self.run_demo),
             ("Run tests", self.run_tests),
             ("Install / repair", self.install),
             ("Build APK", self.build_apk),
@@ -99,13 +103,15 @@ class ControlPanel(QMainWindow):
         self._status(f"Finished with exit code {code}")
 
     def run_demo(self) -> None:
-        self._run("cli.sh", shlex.split(self.args.text()))
+        try:
+            arguments = list(demo_arguments(self.args.text()))
+        except ValueError as exc:
+            QMessageBox.warning(self, PROJECT, f"Invalid arguments: {exc}")
+            return
+        self._run("cli.sh", arguments)
 
     def run_tests(self) -> None:
-        if (ROOT / "test.sh").exists():
-            self._run("test.sh")
-        else:
-            self._run("cli.sh", ["--help"])
+        self._run("test.sh")
 
     def install(self) -> None:
         self._run("install.sh")

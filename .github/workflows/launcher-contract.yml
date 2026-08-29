@@ -20,11 +20,13 @@ jobs:
           test -f install.sh
           test -f run.sh
           test -f cli.sh
+          test -f test.sh
           test -f project_gui.py
           test ! -f doit.sh
-          bash -n install.sh run.sh cli.sh
+          bash -n install.sh run.sh cli.sh test.sh
           python -m py_compile project_gui.py
           grep -q 'install.sh' run.sh
           grep -q 'project_gui.py' run.sh
           grep -qi 'PySide6' install.sh
           grep -q 'cli.sh' README.md
+          grep -q 'test.sh' project_gui.py
